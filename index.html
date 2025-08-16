@@ -1,0 +1,599 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cardápio Baguetone's</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #1a1a1a;
+            color: #fff;
+            margin: 0;
+            padding: 20px;
+        }
+        .container {
+            max-width: 800px;
+            margin: auto;
+            background: #2b2b2b;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+        }
+        .header {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        .header h1 {
+            color: #ffcc00;
+            margin: 0;
+            font-size: 2em;
+        }
+        h2 {
+            color: #ffcc00;
+            border-bottom: 2px solid #b33939;
+            padding-bottom: 5px;
+            margin-top: 30px;
+        }
+        .menu-item, .extra-item, .petisco-item, .batata-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 0;
+            border-bottom: 1px dashed #555;
+        }
+        .menu-item:last-child, .extra-item:last-child, .petisco-item:last-child, .batata-item:last-child {
+            border-bottom: none;
+        }
+        .item-info {
+            flex-grow: 1;
+        }
+        .item-info h3 {
+            margin: 0;
+            font-size: 1.1em;
+            color: #ffcc00;
+        }
+        .item-info p {
+            margin: 0;
+            font-size: 0.9em;
+            color: #ccc;
+        }
+        .item-price {
+            font-weight: bold;
+            color: #ffcc00;
+            margin-right: 15px;
+        }
+        .item-controls {
+            display: flex;
+            align-items: center;
+        }
+        .item-controls button {
+            background-color: #b33939;
+            color: #fff;
+            border: none;
+            width: 30px;
+            height: 30px;
+            font-size: 1.2em;
+            cursor: pointer;
+            border-radius: 4px;
+        }
+        .item-controls button:hover {
+            background-color: #9c2e2e;
+        }
+        .item-controls span {
+            width: 40px;
+            text-align: center;
+            font-size: 1.1em;
+            color: #fff;
+        }
+        .cart-summary {
+            background: #3a3a3a;
+            border: 1px solid #555;
+            padding: 15px;
+            border-radius: 8px;
+            margin-top: 30px;
+        }
+        .cart-summary h3 {
+            margin-top: 0;
+            color: #ffcc00;
+        }
+        .total {
+            font-size: 1.2em;
+            font-weight: bold;
+            text-align: right;
+            margin-top: 10px;
+            color: #ffcc00;
+        }
+        .checkout-form {
+            margin-top: 20px;
+            padding: 15px;
+            border: 1px solid #555;
+            border-radius: 8px;
+        }
+        .checkout-form label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+            color: #ffcc00;
+        }
+        .checkout-form input, .checkout-form select {
+            width: 100%;
+            padding: 8px;
+            margin-bottom: 10px;
+            border: 1px solid #555;
+            border-radius: 4px;
+            background-color: #4a4a4a;
+            color: #fff;
+        }
+        #finalize-btn {
+            display: block;
+            width: 100%;
+            padding: 10px;
+            background-color: #25d366; /* Verde do WhatsApp */
+            color: white;
+            border: none;
+            border-radius: 4px;
+            font-size: 1.1em;
+            cursor: pointer;
+        }
+        #finalize-btn:hover {
+            background-color: #128c7e; /* Tom mais escuro */
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>Cardápio Baguetone's</h1>
+        </div>
+
+        <h2>Opções de Pão</h2>
+        <div class="checkout-form">
+            <label for="bread-option">Escolha o Tipo de Pão:</label>
+            <select id="bread-option">
+                <option value="Baguete">Baguete</option>
+                <option value="Pão Árabe">Pão Árabe</option>
+            </select>
+        </div>
+
+        <h2>Sanduíches</h2>
+        <div class="menu-item" data-price="13.00" data-name="Linguiça Mineira">
+            <div class="item-info"><h3>Linguiça Mineira</h3><p>Alface, tomate, queijo mussarela, cebola e maionese da casa</p></div>
+            <span class="item-price">R$ 13,00</span>
+            <div class="item-controls">
+                <button onclick="changeQuantity(this, -1)">-</button>
+                <span class="quantity">0</span>
+                <button onclick="changeQuantity(this, 1)">+</button>
+            </div>
+        </div>
+        <div class="menu-item" data-price="12.00" data-name="Linguiça Toscana">
+            <div class="item-info"><h3>Linguiça Toscana</h3><p>Alface, tomate, queijo mussarela, cebola confitada no shoyo e maionese da casa</p></div>
+            <span class="item-price">R$ 12,00</span>
+            <div class="item-controls">
+                <button onclick="changeQuantity(this, -1)">-</button>
+                <span class="quantity">0</span>
+                <button onclick="changeQuantity(this, 1)">+</button>
+            </div>
+        </div>
+        <div class="menu-item" data-price="15.00" data-name="Filé de Frango">
+            <div class="item-info"><h3>Filé de Frango</h3><p>Alface, tomate, queijo mussarela, cebola confitada no shoyo e maionese da casa</p></div>
+            <span class="item-price">R$ 15,00</span>
+            <div class="item-controls">
+                <button onclick="changeQuantity(this, -1)">-</button>
+                <span class="quantity">0</span>
+                <button onclick="changeQuantity(this, 1)">+</button>
+            </div>
+        </div>
+        <div class="menu-item" data-price="16.00" data-name="Pernil Suíno">
+            <div class="item-info"><h3>Pernil Suíno</h3><p>Alface, tomate, queijo mussarela, cebola confitada no shoyo e maionese da casa</p></div>
+            <span class="item-price">R$ 16,00</span>
+            <div class="item-controls">
+                <button onclick="changeQuantity(this, -1)">-</button>
+                <span class="quantity">0</span>
+                <button onclick="changeQuantity(this, 1)">+</button>
+            </div>
+        </div>
+        <div class="menu-item" data-price="16.00" data-name="Carne">
+            <div class="item-info"><h3>Carne</h3><p>Alface, tomate, queijo mussarela, cebola confitada no shoyo e maionese da casa</p></div>
+            <span class="item-price">R$ 16,00</span>
+            <div class="item-controls">
+                <button onclick="changeQuantity(this, -1)">-</button>
+                <span class="quantity">0</span>
+                <button onclick="changeQuantity(this, 1)">+</button>
+            </div>
+        </div>
+        <div class="menu-item" data-price="18.00" data-name="Cupim">
+            <div class="item-info"><h3>Cupim</h3><p>Alface, tomate, queijo mussarela, cebola roxa e maionese da casa</p></div>
+            <span class="item-price">R$ 18,00</span>
+            <div class="item-controls">
+                <button onclick="changeQuantity(this, -1)">-</button>
+                <span class="quantity">0</span>
+                <button onclick="changeQuantity(this, 1)">+</button>
+            </div>
+        </div>
+        <div class="menu-item" data-price="19.00" data-name="Camarão">
+            <div class="item-info"><h3>Camarão</h3><p>Alface, tomate, queijo mussarela, cebola confitada no shoyo e cream cheese</p></div>
+            <span class="item-price">R$ 19,00</span>
+            <div class="item-controls">
+                <button onclick="changeQuantity(this, -1)">-</button>
+                <span class="quantity">0</span>
+                <button onclick="changeQuantity(this, 1)">+</button>
+            </div>
+        </div>
+        <div class="menu-item" data-price="14.00" data-name="Peito de Peru">
+            <div class="item-info"><h3>Peito de Peru</h3><p>Alface, tomate, queijo mussarela, cebola confitada no shoyo e maionese da casa</p></div>
+            <span class="item-price">R$ 14,00</span>
+            <div class="item-controls">
+                <button onclick="changeQuantity(this, -1)">-</button>
+                <span class="quantity">0</span>
+                <button onclick="changeQuantity(this, 1)">+</button>
+            </div>
+        </div>
+        <div class="menu-item" data-price="19.00" data-name="Coração">
+            <div class="item-info"><h3>Coração</h3><p>Alface, tomate, queijo mussarela, cebola confitada no shoyo e maionese da casa</p></div>
+            <span class="item-price">R$ 19,00</span>
+            <div class="item-controls">
+                <button onclick="changeQuantity(this, -1)">-</button>
+                <span class="quantity">0</span>
+                <button onclick="changeQuantity(this, 1)">+</button>
+            </div>
+        </div>
+        <div class="menu-item" data-price="16.00" data-name="Cafta">
+            <div class="item-info"><h3>Cafta</h3><p>Alface, tomate, queijo mussarela, cebola confitada no shoyo e maionese da casa</p></div>
+            <span class="item-price">R$ 16,00</span>
+            <div class="item-controls">
+                <button onclick="changeQuantity(this, -1)">-</button>
+                <span class="quantity">0</span>
+                <button onclick="changeQuantity(this, 1)">+</button>
+            </div>
+        </div>
+
+        <h2>Acrescimos</h2>
+        <div class="extra-item" data-price="3.00" data-name="Queijo">
+            <div class="item-info"><h3>Queijo</h3></div>
+            <span class="item-price">R$ 3,00</span>
+            <div class="item-controls">
+                <button onclick="changeQuantity(this, -1)">-</button>
+                <span class="quantity">0</span>
+                <button onclick="changeQuantity(this, 1)">+</button>
+            </div>
+        </div>
+        <div class="extra-item" data-price="4.00" data-name="Cream Cheese">
+            <div class="item-info"><h3>Cream Cheese</h3></div>
+            <span class="item-price">R$ 4,00</span>
+            <div class="item-controls">
+                <button onclick="changeQuantity(this, -1)">-</button>
+                <span class="quantity">0</span>
+                <button onclick="changeQuantity(this, 1)">+</button>
+            </div>
+        </div>
+
+        <h2>Bebidas</h2>
+        <div class="extra-item" data-price="6.00" data-name="Refrigerante Lata">
+            <div class="item-info"><h3>Refrigerante Lata</h3></div>
+            <span class="item-price">R$ 6,00</span>
+            <div class="item-controls">
+                <button onclick="changeQuantity(this, -1)">-</button>
+                <span class="quantity">0</span>
+                <button onclick="changeQuantity(this, 1)">+</button>
+            </div>
+        </div>
+        <div class="extra-item" data-price="7.00" data-name="Refrigerante 600ml">
+            <div class="item-info"><h3>Refrigerante 600ml</h3></div>
+            <span class="item-price">R$ 7,00</span>
+            <div class="item-controls">
+                <button onclick="changeQuantity(this, -1)">-</button>
+                <span class="quantity">0</span>
+                <button onclick="changeQuantity(this, 1)">+</button>
+            </div>
+        </div>
+        <div class="extra-item" data-price="2.00" data-name="Guaravita">
+            <div class="item-info"><h3>Guaravita</h3></div>
+            <span class="item-price">R$ 2,00</span>
+            <div class="item-controls">
+                <button onclick="changeQuantity(this, -1)">-</button>
+                <span class="quantity">0</span>
+                <button onclick="changeQuantity(this, 1)">+</button>
+            </div>
+        </div>
+
+        <h2>Petiscos</h2>
+        <div class="petisco-item" data-price="7.00" data-name="Batata Pequena">
+            <div class="item-info"><h3>Batata Pequena</h3></div>
+            <span class="item-price">R$ 7,00</span>
+            <div class="item-controls">
+                <button onclick="changeQuantity(this, -1)">-</button>
+                <span class="quantity">0</span>
+                <button onclick="changeQuantity(this, 1)">+</button>
+            </div>
+        </div>
+        <div class="petisco-item" data-price="9.00" data-name="Batata Média">
+            <div class="item-info"><h3>Batata Média</h3></div>
+            <span class="item-price">R$ 9,00</span>
+            <div class="item-controls">
+                <button onclick="changeQuantity(this, -1)">-</button>
+                <span class="quantity">0</span>
+                <button onclick="changeQuantity(this, 1)">+</button>
+            </div>
+        </div>
+        <div class="petisco-item" data-price="20.00" data-name="Batata Quente">
+            <div class="item-info"><h3>Batata Quente</h3></div>
+            <span class="item-price">R$ 20,00</span>
+            <div class="item-controls">
+                <button onclick="changeQuantity(this, -1)">-</button>
+                <span class="quantity">0</span>
+                <button onclick="changeQuantity(this, 1)">+</button>
+            </div>
+        </div>
+        <div class="petisco-item" data-price="30.00" data-name="Isca de Frango">
+            <div class="item-info"><h3>Isca de Frango</h3><p>Iscas de filé de frango empanado</p></div>
+            <span class="item-price">R$ 30,00</span>
+            <div class="item-controls">
+                <button onclick="changeQuantity(this, -1)">-</button>
+                <span class="quantity">0</span>
+                <button onclick="changeQuantity(this, 1)">+</button>
+            </div>
+        </div>
+        <div class="petisco-item" data-price="35.00" data-name="Isca de Alcatra">
+            <div class="item-info"><h3>Isca de Alcatra</h3><p>Iscas de alcatra aceboladas</p></div>
+            <span class="item-price">R$ 35,00</span>
+            <div class="item-controls">
+                <button onclick="changeQuantity(this, -1)">-</button>
+                <span class="quantity">0</span>
+                <button onclick="changeQuantity(this, 1)">+</button>
+            </div>
+        </div>
+        <div class="petisco-item" data-price="40.00" data-name="Camarão Petisco">
+            <div class="item-info"><h3>Camarão Petisco</h3><p>Camarão frito na manteiga com alho</p></div>
+            <span class="item-price">R$ 40,00</span>
+            <div class="item-controls">
+                <button onclick="changeQuantity(this, -1)">-</button>
+                <span class="quantity">0</span>
+                <button onclick="changeQuantity(this, 1)">+</button>
+            </div>
+        </div>
+        
+        <h2>Batatas Especiais</h2>
+        <div class="batata-item" data-price="28.00" data-name="Batata com Cupim">
+            <div class="item-info"><h3>Batata com Cupim</h3><p>Porção de batata frita com cupim acebolado, cream cheese e cebolete</p></div>
+            <span class="item-price">R$ 28,00</span>
+            <div class="item-controls">
+                <button onclick="changeQuantity(this, -1)">-</button>
+                <span class="quantity">0</span>
+                <button onclick="changeQuantity(this, 1)">+</button>
+            </div>
+        </div>
+        <div class="batata-item" data-price="24.00" data-name="Batata com Linguiça Mineira">
+            <div class="item-info"><h3>Batata com Linguiça Mineira</h3><p>Porção de batata frita com linguiça mineira acebolada e cebolete</p></div>
+            <span class="item-price">R$ 24,00</span>
+            <div class="item-controls">
+                <button onclick="changeQuantity(this, -1)">-</button>
+                <span class="quantity">0</span>
+                <button onclick="changeQuantity(this, 1)">+</button>
+            </div>
+        </div>
+        <div class="batata-item" data-price="25.00" data-name="Batata com Frango">
+            <div class="item-info"><h3>Batata com Frango</h3><p>Porção de batata frita com frango acebolado e cebolete</p></div>
+            <span class="item-price">R$ 25,00</span>
+            <div class="item-controls">
+                <button onclick="changeQuantity(this, -1)">-</button>
+                <span class="quantity">0</span>
+                <button onclick="changeQuantity(this, 1)">+</button>
+            </div>
+        </div>
+        <div class="batata-item" data-price="30.00" data-name="Batata com Camarão">
+            <div class="item-info"><h3>Batata com Camarão</h3><p>Porção de batata frita com camarão, cream cheese e cebolete</p></div>
+            <span class="item-price">R$ 30,00</span>
+            <div class="item-controls">
+                <button onclick="changeQuantity(this, -1)">-</button>
+                <span class="quantity">0</span>
+                <button onclick="changeQuantity(this, 1)">+</button>
+            </div>
+        </div>
+        <div class="batata-item" data-price="28.00" data-name="Batata com Carne">
+            <div class="item-info"><h3>Batata com Carne</h3><p>Porção de batata frita com carne acebolada e cebolete</p></div>
+            <span class="item-price">R$ 28,00</span>
+            <div class="item-controls">
+                <button onclick="changeQuantity(this, -1)">-</button>
+                <span class="quantity">0</span>
+                <button onclick="changeQuantity(this, 1)">+</button>
+            </div>
+        </div>
+        <div class="batata-item" data-price="25.00" data-name="Batata com Pernil">
+            <div class="item-info"><h3>Batata com Pernil</h3><p>Porção de batata frita com pernil desfiado acebolado, barbecue e cebolete</p></div>
+            <span class="item-price">R$ 25,00</span>
+            <div class="item-controls">
+                <button onclick="changeQuantity(this, -1)">-</button>
+                <span class="quantity">0</span>
+                <button onclick="changeQuantity(this, 1)">+</button>
+            </div>
+        </div>
+
+        <div class="cart-summary">
+            <h3>Seu Pedido</h3>
+            <div id="cart-items"></div>
+            <div class="total">
+                <strong>Total: <span id="total-price">R$ 0,00</span></strong>
+            </div>
+        </div>
+
+        <div class="checkout-form">
+            <h2>Dados do Pedido</h2>
+            <form id="order-form">
+                <label for="name">Nome:</label>
+                <input type="text" id="name" required>
+
+                <label for="delivery-option">Opção de Entrega:</label>
+                <select id="delivery-option" onchange="toggleAddressField(); updateCart();">
+                    <option value="delivery">Entrega</option>
+                    <option value="pickup">Retirada no Local</option>
+                </select>
+
+                <div id="address-field">
+                    <label for="address">Endereço:</label>
+                    <input type="text" id="address" placeholder="Rua, Número, Bairro" required>
+                </div>
+
+                <label for="payment-method">Forma de Pagamento:</label>
+                <select id="payment-method">
+                    <option value="pix">Pix</option>
+                    <option value="card">Cartão de Crédito/Débito</option>
+                    <option value="cash">Dinheiro</option>
+                </select>
+
+                <button type="button" id="finalize-btn">Finalizar Pedido via WhatsApp</button>
+            </form>
+        </div>
+    </div>
+<script>
+    // Função para alterar a quantidade de itens
+    function changeQuantity(button, change) {
+        const itemControls = button.parentElement;
+        const quantitySpan = itemControls.querySelector('.quantity');
+        let quantity = parseInt(quantitySpan.textContent);
+        
+        quantity += change;
+        
+        if (quantity < 0) {
+            quantity = 0;
+        }
+        
+        quantitySpan.textContent = quantity;
+        updateCart();
+    }
+
+    // Função para atualizar o carrinho e o total
+    function updateCart() {
+        let total = 0;
+        const cartItemsDiv = document.getElementById('cart-items');
+        cartItemsDiv.innerHTML = '';
+        
+        const allItems = document.querySelectorAll('.menu-item, .extra-item, .petisco-item, .batata-item');
+        
+        allItems.forEach(item => {
+            const quantitySpan = item.querySelector('.quantity');
+            
+            // Verifica se o item possui um campo de quantidade antes de continuar
+            if (quantitySpan) {
+                const quantity = parseInt(quantitySpan.textContent);
+                const price = parseFloat(item.dataset.price);
+                const name = item.dataset.name;
+                
+                if (quantity > 0) {
+                    const itemTotal = quantity * price;
+                    total += itemTotal;
+                    
+                    const cartItem = document.createElement('div');
+                    cartItem.innerHTML = `${quantity}x ${name} - R$ ${itemTotal.toFixed(2).replace('.', ',')}`;
+                    cartItemsDiv.appendChild(cartItem);
+                }
+            }
+        });
+        
+        // Adiciona a taxa de entrega se a opção de entrega estiver selecionada
+        const deliveryOption = document.getElementById('delivery-option').value;
+        let deliveryFee = 0;
+        if (deliveryOption === 'delivery') {
+            deliveryFee = 5.00;
+            total += deliveryFee;
+            
+            const deliveryItem = document.createElement('div');
+            deliveryItem.innerHTML = `Taxa de Entrega - R$ ${deliveryFee.toFixed(2).replace('.', ',')}`;
+            cartItemsDiv.appendChild(deliveryItem);
+        }
+        
+        document.getElementById('total-price').textContent = `R$ ${total.toFixed(2).replace('.', ',')}`;
+    }
+
+    // Função para mostrar/esconder o campo de endereço
+    function toggleAddressField() {
+        const deliveryOption = document.getElementById('delivery-option').value;
+        const addressField = document.getElementById('address-field');
+        const addressInput = document.getElementById('address');
+        
+        if (deliveryOption === 'delivery') {
+            addressField.style.display = 'block';
+            addressInput.required = true;
+        } else {
+            addressField.style.display = 'none';
+            addressInput.required = false;
+        }
+    }
+
+    // Função para finalizar o pedido e gerar a mensagem do WhatsApp
+    function finalizeOrder() {
+        const name = document.getElementById('name').value;
+        const bread = document.getElementById('bread-option').value;
+        const deliveryOption = document.getElementById('delivery-option').value;
+        const paymentMethod = document.getElementById('payment-method').value;
+        const total = document.getElementById('total-price').textContent;
+        const whatsappNumber = '5521965830446'; // Substitua pelo número de WhatsApp do estabelecimento
+
+        if (!name) {
+            alert('Por favor, digite seu nome.');
+            return;
+        }
+
+        let orderMessage = `Olá, meu nome é ${name} e gostaria de fazer o seguinte pedido:\n\n`;
+        let deliveryInfo = '';
+
+        if (deliveryOption === 'delivery') {
+            const address = document.getElementById('address').value;
+            if (!address) {
+                alert('Por favor, preencha o endereço para a entrega.');
+                return;
+            }
+            deliveryInfo = `*Opção:* Entrega\n*Endereço:* ${address}\n`;
+        } else {
+            deliveryInfo = '*Opção:* Retirada no Local\n';
+        }
+
+        let orderItems = '';
+        orderItems += `*Pão:* ${bread}\n`;
+        
+        const allItems = document.querySelectorAll('.menu-item, .extra-item, .petisco-item, .batata-item');
+        
+        allItems.forEach(item => {
+            const quantitySpan = item.querySelector('.quantity');
+            
+            if (quantitySpan) {
+                 const quantity = parseInt(quantitySpan.textContent);
+                 const name = item.dataset.name;
+
+                 if (quantity > 0) {
+                     orderItems += `${quantity}x ${name}\n`;
+                 }
+            }
+        });
+
+        if (orderItems === `*Pão:* ${bread}\n`) {
+            alert('Seu carrinho está vazio. Adicione itens para fazer o pedido.');
+            return;
+        }
+
+        const paymentText = paymentMethod === 'pix' ? 'Pix' : 
+                          paymentMethod === 'card' ? 'Cartão de Crédito/Débito' : 
+                          'Dinheiro';
+        
+        let pixKeyInfo = '';
+        if (paymentMethod === 'pix') {
+            pixKeyInfo = `\n\n*Chave Pix:* 13074154748\n`;
+        }
+
+        orderMessage += `*Itens:*\n${orderItems}\n---
+*Total:* ${total}\n*Forma de Pagamento:* ${paymentText}${pixKeyInfo}\n${deliveryInfo}`;
+
+        const whatsappUrl = `https://wa.me/${whatsappNumber}?text=${encodeURIComponent(orderMessage)}`;
+        window.open(whatsappUrl, '_blank');
+    }
+
+    // Adiciona um listener de evento ao botão para chamar a função de finalização
+    document.getElementById('finalize-btn').addEventListener('click', finalizeOrder);
+
+    // Inicializa a exibição do campo de endereço ao carregar a página
+    window.onload = function() {
+        toggleAddressField();
+    };
+</script>
+</body>
+</html>
